@@ -12,10 +12,6 @@ import { getAvatarIcon, getProgressIcon } from "@raycast/utils";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { KeydenPathError, listTotps, TotpEntry, TotpSnapshot } from "./keyden";
 
-type ExtensionPreferences = {
-    keydenPath?: string;
-};
-
 const AVATAR_COLORS = ["#4F7DF3", "#7857D9", "#C84B9B", "#D94B4B", "#D9822B", "#2F9E74", "#2185A6"];
 const avatarCache = new Map<string, ReturnType<typeof getAvatarIcon>>();
 
@@ -63,7 +59,7 @@ function TotpDetail({ entry, now }: { entry: TotpEntry; now: number }) {
             metadata={
                 <List.Item.Detail.Metadata>
                     <List.Item.Detail.Metadata.Label title="Issuer" text={entry.issuer} icon={Icon.Building} />
-                    <List.Item.Detail.Metadata.Label title="Account" text={entry.account} icon={Icon.Person} />
+                    <List.Item.Detail.Metadata.Label title="Account" text={entry.account || "—"} icon={Icon.Person} />
                     <List.Item.Detail.Metadata.Separator />
                     <List.Item.Detail.Metadata.Label title="TOTP Code" text={entry.code} icon={Icon.Key} />
                     <List.Item.Detail.Metadata.Label
@@ -96,8 +92,8 @@ function TotpListItem({
         <List.Item
             id={`${idPrefix}:${entry.id}`}
             icon={getIssuerAvatar(entry.issuer)}
-            title={entry.account}
-            subtitle={showIssuer ? entry.issuer : undefined}
+            title={entry.account || entry.issuer}
+            subtitle={showIssuer && entry.account ? entry.issuer : undefined}
             keywords={[entry.issuer, entry.account]}
             accessories={[{ text: `${remainingSeconds}s`, icon: getCountdownIcon(remainingSeconds) }]}
             detail={<TotpDetail entry={entry} now={now} />}
@@ -122,7 +118,7 @@ function TotpListItem({
 }
 
 export default function Command() {
-    const { keydenPath } = getPreferenceValues<ExtensionPreferences>();
+    const { keydenPath } = getPreferenceValues<Preferences.ListTotp>();
     const [snapshot, setSnapshot] = useState<TotpSnapshot>();
     const [error, setError] = useState<Error>();
     const [isRefreshing, setIsRefreshing] = useState(false);

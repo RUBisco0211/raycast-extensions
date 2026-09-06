@@ -97,15 +97,15 @@ export function parseKeydenList(output: string, fetchedAt = Date.now()): TotpEnt
             const resultMatch = result.match(/^(\d+)\s+\((\d+)s\)$/);
             const identitySeparator = identity.indexOf(":");
 
-            if (!resultMatch || identitySeparator === -1) {
+            if (!resultMatch || !identity) {
                 throw new Error(`Unable to parse Keyden output on line ${index + 1}.`);
             }
 
-            const issuer = identity.slice(0, identitySeparator).trim();
-            const account = identity.slice(identitySeparator + 1).trim();
+            const issuer = (identitySeparator === -1 ? identity : identity.slice(0, identitySeparator)).trim();
+            const account = identitySeparator === -1 ? "" : identity.slice(identitySeparator + 1).trim();
             const [, code, remainingSeconds] = resultMatch;
 
-            if (!issuer || !account) {
+            if (!issuer || (identitySeparator !== -1 && !account)) {
                 throw new Error(`Keyden returned an incomplete account on line ${index + 1}.`);
             }
 
