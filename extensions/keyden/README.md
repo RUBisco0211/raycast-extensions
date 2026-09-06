@@ -11,9 +11,7 @@ A [Raycast](https://www.raycast.com/) extension for browsing, searching, and cop
 - **Instant Search**: Search across account names and issuers using Raycast's built-in search.
 - **Live Countdown**: See the remaining validity period update every second with a color-coded progress indicator.
 - **Account Details**: View the issuer, account name, current TOTP code, and remaining time in the detail panel.
-- **Secure Copying**: Press `Enter` to copy the selected TOTP code without adding it to Raycast's Clipboard History.
 - **Automatic Refresh**: Fetch a new code from Keyden when the current TOTP period expires.
-- **Issuer Avatars**: Identify services quickly with consistent, colorful issuer avatars.
 
 ## Prerequisites
 
